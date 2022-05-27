@@ -29,7 +29,12 @@ export async function post(data: any) {
 
 export async function get(id: any) {
   try {
-    const result = await ItemsModel.get(id);
+    const result: any = await ItemsModel.get(id);
+    if(!result.length){
+      return {
+        statusCode: 404,
+      };
+    }
     return {
       statusCode: 200,
       data: result,

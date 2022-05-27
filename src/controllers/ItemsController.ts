@@ -33,7 +33,11 @@ export class ItemsController {
     if (result.statusCode == 200) {
       res.status(200);
       res.json(result.data);
-    } else if (result.statusCode == 500) {
+    }
+    else if (result.statusCode == 404) {
+      res.status(404).end();
+    }
+    else if (result.statusCode == 500) {
       res.status(500).end();
     }
   }
