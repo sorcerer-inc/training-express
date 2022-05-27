@@ -1,75 +1,68 @@
-import * as DBconnectionHelper from "../helpers/DBHelper";
-import mysql, {ResultSetHeader} from "mysql2/promise";
-const log = require('log4js').getLogger("index");
+import * as ItemsModel from "../models/ItemsModel"
 
-export async function getList(): Promise<any> {
-  // ローカル以外であれば管理DBのテーブルを読む
-  // ローカルならprojectsテーブルを読む
-  const connection = await DBconnectionHelper.db_connection;
+export async function getList() {
   try {
-    const results = await connection.query<any[]>('SELECT * from projects');
-    return {data: results};
+    const result = await ItemsModel.getList();
+    return {
+      statusCode: 200,
+      data: result,
+    };
   } catch (e) {
-    throw e;
-  } finally {
-    await connection.end();
+    return {
+      statusCode: 500,
+    };
   }
 }
 
-export async function post(data: any): Promise<{ id: any }> {
-  // ヘルパー関数を呼び出す
-  const connection = await DBconnectionHelper.db_connection;
-  log.info(data);
+export async function post(data: any) {
   try {
-    const result = await connection.query<ResultSetHeader>("INSERT INTO items (id, name, heal, price) values (?, ?)", [data.id, data.name, data.heal, data.price]);
-    await connection.commit();
-    return {id: result};
+    await ItemsModel.post(data);
+    return {
+      statusCode: 200,
+    };
   } catch (e) {
-    throw(e);
-  } finally {
-    await connection.end();
+    return {
+      statusCode: 500,
+    };
   }
 }
 
-export async function get($id: any){
-  // ヘルパー関数を呼び出す
-  const connection = await DBconnectionHelper.db_connection;
-
+export async function get(id: any) {
   try {
-    const result = await connection.query("SELECT * FROM items WHERE id = ?", [$id]);
-    return {data: result};
+    const result = await ItemsModel.get(id);
+    return {
+      statusCode: 200,
+      data: result,
+    };
   } catch (e) {
-    throw(e);
-  } finally {
-    await connection.end();
+    return {
+      statusCode: 500,
+    };
   }
 }
 
-export async function put($data: any){
-  // ヘルパー関数を呼び出す
-  const connection = await DBconnectionHelper.db_connection;
-
+export async function put(data: any) {
   try {
-    const result = await connection.query("UPDATE items SET name = ?, heal = ?, price = ?  WHERE id = ?", [$data.name, $data.heal, $data.price, $data.id]);
-    return {data: result};
+    await ItemsModel.put(data);
+    return {
+      statusCode: 200,
+    };
   } catch (e) {
-    throw(e);
-  } finally {
-    await connection.end();
+    return {
+      statusCode: 500,
+    };
   }
 }
 
-export async function dataDelete($id: any){
-  // ヘルパー関数を呼び出す
-  const connection = await DBconnectionHelper.db_connection;
-
+export async function dataDelete(id: any){
   try {
-    const result = await connection.query("DELETE FROM items WHERE id = ?", [$id]);
-    return {data: result};
+    await ItemsModel.dataDelete(id);
+    return {
+      statusCode: 200,
+    };
   } catch (e) {
-    throw(e);
-  } finally {
-    await connection.end();
+    return {
+      statusCode: 500,
+    };
   }
-
 }
