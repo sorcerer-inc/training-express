@@ -1,5 +1,5 @@
 import {HogeController} from "./HogeController";
-import {ItemsController} from "./ItemsController";
+import {ItemsController} from "./itemsController";
 import { UserController } from "./UserController";
 
 export {

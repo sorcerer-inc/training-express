@@ -1,4 +1,4 @@
-import {ItemsData} from "../interfaces/Items";
+import {ItemsData} from "../interfaces/items";
 import { db_pool } from "../helpers/DBHelper";
 
 export async function getList() {
@@ -8,7 +8,7 @@ export async function getList() {
   return rows;
 }
 
-export async function post(data: ItemsData) {
+export async function create(data: ItemsData) {
   await db_pool.promise()
     .query(
       "INSERT INTO items (id, name, heal, price) values (?, ?, ?, ?)",
@@ -16,7 +16,7 @@ export async function post(data: ItemsData) {
     );
 }
 
-export async function get(id: number) {
+export async function getRecode(id: number) {
   const [row, fields] = await db_pool
     .promise()
     .query("SELECT * FROM items WHERE id = ?", [id]);
@@ -24,7 +24,7 @@ export async function get(id: number) {
   return row;
 }
 
-export async function put(data: ItemsData) {
+export async function update(data: ItemsData) {
   await db_pool.promise()
     .query(
       "UPDATE items SET name = ?, heal = ?, price = ?  WHERE id = ?",

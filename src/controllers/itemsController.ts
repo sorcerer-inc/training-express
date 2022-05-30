@@ -1,5 +1,5 @@
 import {Response, Request, NextFunction} from "express";
-import * as Items from "../services/ItemrsService"
+import * as Items from "../services/itemrsService"
 const log = require('log4js').getLogger("index");
 
 
@@ -17,7 +17,7 @@ export class ItemsController {
   }
 
   async post(req: Request, res :Response){
-    const result = await Items.post(req.body);
+    const result = await Items.create(req.body);
 
     if (result.statusCode == 200) {
       res.status(200).end();
@@ -28,7 +28,7 @@ export class ItemsController {
 
 
   async get(req: Request, res :Response){
-    const result = await Items.get(req.params.id);
+    const result = await Items.getRecode(req.params.id);
 
     if (result.statusCode == 200) {
       res.status(200);
@@ -50,7 +50,7 @@ export class ItemsController {
       'price': req.body.price,
     }
 
-    const result = await Items.put(putData);
+    const result = await Items.edit(putData);
 
     if (result.statusCode == 200) {
       res.status(200).end();

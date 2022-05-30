@@ -1,4 +1,4 @@
-import * as ItemsModel from "../models/ItemsModel"
+import * as ItemsModel from "../models/itemsModel"
 
 export async function getList() {
   try {
@@ -14,9 +14,9 @@ export async function getList() {
   }
 }
 
-export async function post(data: any) {
+export async function create(data: any) {
   try {
-    await ItemsModel.post(data);
+    await ItemsModel.create(data);
     return {
       statusCode: 200,
     };
@@ -27,9 +27,9 @@ export async function post(data: any) {
   }
 }
 
-export async function get(id: any) {
+export async function getRecode(id: any) {
   try {
-    const result: any = await ItemsModel.get(id);
+    const result: any = await ItemsModel.getRecode(id);
     if(!result.length){
       return {
         statusCode: 404,
@@ -46,9 +46,9 @@ export async function get(id: any) {
   }
 }
 
-export async function put(data: any) {
+export async function edit(data: any) {
   try {
-    await ItemsModel.put(data);
+    await ItemsModel.update(data);
     return {
       statusCode: 200,
     };
