@@ -7,9 +7,7 @@ const log = require("log4js").getLogger("index");
 export async function getList() {
   try {
     const result = await ItemsModel.getList();
-    return {
-      data: result,
-    };
+    return result;
   } catch (e) {
     throw new DBError("db error");
   }
@@ -28,9 +26,7 @@ export async function create(data: ItemsData) {
 export async function getRecode(id: number) {
   try {
     const result = await ItemsModel.getRecode(id);
-    return {
-      data: result,
-    };
+    return result;
   } catch (e) {
     if (e instanceof NotFoundError) {
       throw new NotFoundError("not found");

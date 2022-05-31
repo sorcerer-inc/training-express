@@ -12,12 +12,10 @@ export class ItemsController {
     try {
       const result = await Items.getList();
       res.status(200);
-      res.json(result.data);
+      res.json(result);
     }
     catch (e) {
-      if (e instanceof DBError) {
-        res.status(500).end();
-      }
+      throw e;
     }
   }
 
@@ -62,9 +60,7 @@ export class ItemsController {
       res.status(200).end();
     }
     catch (e) {
-      if (e instanceof DBError) {
-        res.status(500).end();
-      }
+      throw e;
     }
   }
 
@@ -86,14 +82,15 @@ export class ItemsController {
 
     try {
       const result = await Items.getRecode(id);
-      if (result) {
-        res.status(200);
-        res.json(result.data);
-      }
+      res.status(200);
+      res.json(result);
     }
     catch (e) {
       if (e instanceof NotFoundError) {
         res.status(404).end();
+      }
+      else{
+        throw e;
       }
     }
   }
@@ -146,6 +143,9 @@ export class ItemsController {
       if (e instanceof NotFoundError) {
         res.status(404).end();
       }
+      else{
+        throw e;
+      }
     }
   }
 
@@ -171,6 +171,9 @@ export class ItemsController {
     catch (e) {
       if (e instanceof NotFoundError) {
         res.status(404).end();
+      }
+      else{
+        throw e;
       }
     }
   }
