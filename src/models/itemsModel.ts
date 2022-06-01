@@ -12,10 +12,10 @@ export async function getList(): Promise<{data : ItemsData[]}> {
   let itemList : ItemsData[] = [];
   result[0].forEach((element: ItemsData) => {
     itemList.push({
-      id: element.id,
-      name: element.name,
-      heal: element.heal,
-      price: element.price
+      'id': element.id,
+      'name': element.name,
+      'heal': element.heal,
+      'price': element.price
     })
   });
 
