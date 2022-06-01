@@ -11,7 +11,6 @@ export class ItemsController {
   async getList(req: Request, res :Response<ItemsData[]>, next :NextFunction){
     try {
       const result = await Items.getList();
-
       const resData: ItemsData[] = result.data;
       res.status(200).send(resData);
     }
@@ -22,7 +21,6 @@ export class ItemsController {
 
   //１件作成
   async post(req: Request, res :Response, next :NextFunction){
-
     //作成に必要なデータの確認
     if (!req.body.id || !req.body.name || !req.body.heal || !req.body.price) {
       res.status(400).end();
@@ -65,7 +63,6 @@ export class ItemsController {
     }
   }
 
-
   //１件取得
   async get(req: Request, res :Response<ItemsData>, next :NextFunction){
     //パラメータの存在チェック
@@ -98,7 +95,6 @@ export class ItemsController {
 
   //１件編集
   async put(req: Request, res :Response, next :NextFunction){
-
     //編集に必要なデータの確認
     if (!req.params.id || !req.body.name || !req.body.heal || !req.body.price) {
       res.status(400).end();

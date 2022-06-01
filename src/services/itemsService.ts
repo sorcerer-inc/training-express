@@ -5,21 +5,13 @@ const log = require("log4js").getLogger("index");
 
 //全件取得
 export async function getList(): Promise<{data : ItemsData[]}> {
-  try {
-    const result = await ItemsModel.getList();
-    return {data: result.data};
-  } catch (e) {
-    throw new DBError("db error");
-  }
+  const result = await ItemsModel.getList();
+  return {data: result.data};
 }
 
 //１件作成
 export async function create(data: ItemsData): Promise<void> {
-  try {
-    await ItemsModel.create(data);
-  } catch (e) {
-    throw new DBError("db error");
-  }
+  await ItemsModel.create(data);
 }
 
 //１件取得
@@ -29,10 +21,10 @@ export async function getRecode(id: number): Promise<{data: ItemsData}> {
     return {data: result.data};
   } catch (e) {
     if (e instanceof NotFoundError) {
-      throw new NotFoundError("not found");
+      throw new NotFoundError();
     }
     else{
-      throw new DBError("db error");
+      throw e;
     }
   }
 }
@@ -55,6 +47,9 @@ export async function dataDelete(id: number): Promise<void> {
   } catch (e) {
     if (e instanceof NotFoundError) {
       throw new NotFoundError("not found");
+    }
+    else{
+      throw e;
     }
   }
 }
