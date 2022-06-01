@@ -18,7 +18,12 @@ export async function create(data: ItemsData): Promise<void> {
 export async function getRecode(id: number): Promise<{data: ItemsData}> {
   try {
     const result = await ItemsModel.getRecode(id);
-    return {data: result.data};
+    if(result){
+      return {data: result.data};
+    }
+    else {
+      throw new NotFoundError();
+    }
   } catch (e) {
     if (e instanceof NotFoundError) {
       throw new NotFoundError();
