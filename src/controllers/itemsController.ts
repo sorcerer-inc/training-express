@@ -16,7 +16,7 @@ export class ItemsController {
       res.status(200).send(resData);
     }
     catch (e) {
-      next(new Error('Exception Error'));
+      next(e);
     }
   }
 
@@ -61,7 +61,7 @@ export class ItemsController {
       res.status(200).end();
     }
     catch (e) {
-      next(new Error('Exception Error'));
+      next(e);
     }
   }
 
@@ -91,7 +91,7 @@ export class ItemsController {
         res.status(404).end();
       }
       else{
-        next(new Error('Exception Error'));
+        next(e);
       }
     }
   }
@@ -145,7 +145,7 @@ export class ItemsController {
         res.status(404).end();
       }
       else{
-        next(new Error('Exception Error'));
+        next(e);
       }
     }
   }
@@ -174,7 +174,7 @@ export class ItemsController {
         res.status(404).end();
       }
       else{
-        next(new Error('Exception Error'));
+        next(e);
       }
     }
   }
