@@ -4,15 +4,26 @@ import {NotFoundError} from "../interfaces/my-error";
 const log = require("log4js").getLogger("index");
 
 //全件取得
-export async function getList() {
-  const [rows, fields] = await db_pool
+export async function getList(): Promise<{data : ItemsData[]}> {
+  const result: [any, any] = await db_pool
     .promise()
     .query("SELECT * FROM items;");
-  return rows;
+
+  let itemList : ItemsData[] = [];
+  result[0].forEach((element: ItemsData) => {
+    itemList.push({
+      id: element.id,
+      name: element.name,
+      heal: element.heal,
+      price: element.price
+    })
+  });
+
+  return {data: itemList};
 }
 
 //１件作成
-export async function create(data: ItemsData) {
+export async function create(data: ItemsData): Promise<void> {
   await db_pool.promise()
     .query(
       "INSERT INTO items (id, name, heal, price) values (?, ?, ?, ?)",
@@ -21,7 +32,7 @@ export async function create(data: ItemsData) {
 }
 
 //１件取得
-export async function getRecode(id: number) {
+export async function getRecode(id: number): Promise<{data : ItemsData}> {
   const result: [any, any] = await db_pool
     .promise()
     .query("SELECT * FROM items WHERE id = ?", [id]);
@@ -30,11 +41,19 @@ export async function getRecode(id: number) {
     throw new NotFoundError("not found");
   }
 
-  return result[0];
+  let itemList: ItemsData = {id: 0, name: '', heal: 0, price: 0};
+  result[0].forEach((element: ItemsData) => {
+    itemList.id = element.id;
+    itemList.name = element.name;
+    itemList.heal = element.heal;
+    itemList.price = element.price;
+  });
+
+  return {data: itemList};
 }
 
 //１件編集
-export async function update(data: ItemsData) {
+export async function update(data: ItemsData): Promise<void>{
   const result: [any, any] = await db_pool
     .promise()
     .query(
@@ -48,7 +67,7 @@ export async function update(data: ItemsData) {
 }
 
 //１件物理削除
-export async function dataDelete(id: number){
+export async function dataDelete(id: number): Promise<void>{
   const result: [any, any] = await db_pool
     .promise()
     .query(

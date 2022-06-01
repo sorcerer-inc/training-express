@@ -8,19 +8,20 @@ const log = require('log4js').getLogger("index");
 
 export class ItemsController {
   //全件取得
-  async getList(req: Request, res :Response){
+  async getList(req: Request, res :Response<ItemsData[]>, next :NextFunction){
     try {
       const result = await Items.getList();
-      res.status(200);
-      res.json(result);
+
+      const resData: ItemsData[] = result.data;
+      res.status(200).send(resData);
     }
     catch (e) {
-      throw e;
+      next(new Error('Exception Error'));
     }
   }
 
   //１件作成
-  async post(req: Request, res :Response){
+  async post(req: Request, res :Response, next :NextFunction){
 
     //作成に必要なデータの確認
     if (!req.body.id || !req.body.name || !req.body.heal || !req.body.price) {
@@ -60,13 +61,13 @@ export class ItemsController {
       res.status(200).end();
     }
     catch (e) {
-      throw e;
+      next(new Error('Exception Error'));
     }
   }
 
 
   //１件取得
-  async get(req: Request, res :Response){
+  async get(req: Request, res :Response<ItemsData>, next :NextFunction){
     //パラメータの存在チェック
     if (!req.params.id) {
       res.status(400).end();
@@ -82,21 +83,21 @@ export class ItemsController {
 
     try {
       const result = await Items.getRecode(id);
-      res.status(200);
-      res.json(result);
+      const resData: ItemsData = result.data;
+      res.status(200).send(resData);
     }
     catch (e) {
       if (e instanceof NotFoundError) {
         res.status(404).end();
       }
       else{
-        throw e;
+        next(new Error('Exception Error'));
       }
     }
   }
 
   //１件編集
-  async put(req: Request, res :Response){
+  async put(req: Request, res :Response, next :NextFunction){
 
     //編集に必要なデータの確認
     if (!req.params.id || !req.body.name || !req.body.heal || !req.body.price) {
@@ -144,13 +145,13 @@ export class ItemsController {
         res.status(404).end();
       }
       else{
-        throw e;
+        next(new Error('Exception Error'));
       }
     }
   }
 
   //１件物理削除
-  async delete(req: Request, res :Response){
+  async delete(req: Request, res :Response, next :NextFunction){
     //パラメータの存在チェック
     if (!req.params.id) {
       res.status(400).end();
@@ -173,7 +174,7 @@ export class ItemsController {
         res.status(404).end();
       }
       else{
-        throw e;
+        next(new Error('Exception Error'));
       }
     }
   }
