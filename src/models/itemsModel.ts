@@ -4,7 +4,7 @@ import {NotFoundError} from "../interfaces/my-error";
 const log = require("log4js").getLogger("index");
 
 //全件取得
-export async function getList(): Promise<{data : ItemsData[]}> {
+export async function getList(): Promise<ItemsData[]> {
   const result: [any, any] = await db_pool
     .promise()
     .query("SELECT * FROM items;");
@@ -19,7 +19,7 @@ export async function getList(): Promise<{data : ItemsData[]}> {
     })
   });
 
-  return {data: itemList};
+  return itemList;
 }
 
 //１件作成
@@ -32,7 +32,7 @@ export async function create(data: ItemsData): Promise<void> {
 }
 
 //１件取得
-export async function getRecode(id: number): Promise<{data : ItemsData}> {
+export async function getRecode(id: number): Promise<ItemsData> {
   const result: [any, any] = await db_pool
     .promise()
     .query("SELECT * FROM items WHERE id = ?", [id]);
@@ -49,7 +49,7 @@ export async function getRecode(id: number): Promise<{data : ItemsData}> {
     itemList.price = element.price;
   });
 
-  return {data: itemList};
+  return itemList;
 }
 
 //１件編集
@@ -61,7 +61,7 @@ export async function update(data: ItemsData): Promise<void>{
       [data.name, data.heal, data.price, data.id]
     );
 
-  if(result[0].affectedRows == 0){
+  if(result[0].affectedRows === 0){
     throw new NotFoundError("not found");
   }
 }

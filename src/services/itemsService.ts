@@ -4,9 +4,9 @@ import {DBError, NotFoundError} from "../interfaces/my-error";
 const log = require("log4js").getLogger("index");
 
 //全件取得
-export async function getList(): Promise<{data : ItemsData[]}> {
+export async function getList(): Promise<ItemsData[]> {
   const result = await ItemsModel.getList();
-  return {data: result.data};
+  return result;
 }
 
 //１件作成
@@ -15,11 +15,11 @@ export async function create(data: ItemsData): Promise<void> {
 }
 
 //１件取得
-export async function getRecode(id: number): Promise<{data: ItemsData}> {
+export async function getRecode(id: number): Promise<ItemsData> {
   try {
     const result = await ItemsModel.getRecode(id);
     if(result){
-      return {data: result.data};
+      return result;
     }
     else {
       throw new NotFoundError();

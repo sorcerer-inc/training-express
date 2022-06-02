@@ -11,8 +11,8 @@ export class ItemsController {
   async getList(req: Request, res :Response<ItemsData[]>, next :NextFunction){
     try {
       const result = await Items.getList();
-      const resData: ItemsData[] = result.data;
-      res.status(200).send(resData);
+      const resData: ItemsData[] = result;
+      res.json(resData);
     }
     catch (e) {
       next(e);
@@ -80,7 +80,7 @@ export class ItemsController {
 
     try {
       const result = await Items.getRecode(id);
-      const resData: ItemsData = result.data;
+      const resData: ItemsData = result;
       res.status(200).send(resData);
     }
     catch (e) {
@@ -134,7 +134,7 @@ export class ItemsController {
 
     try {
       await Items.edit(putData);
-      res.status(200).end();
+      res.end();
     }
     catch (e) {
       if (e instanceof NotFoundError) {
