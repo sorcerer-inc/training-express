@@ -18,9 +18,7 @@ export async function create(data: ItemsData): Promise<void> {
     if (e instanceof ConflictError) {
       throw new ConflictError();
     }
-    else{
-      throw e;
-    }
+    throw e;
   }
 }
 
@@ -33,9 +31,7 @@ export async function getRecode(id: number): Promise<ItemsData> {
     if (e instanceof NotFoundError) {
       throw new NotFoundError();
     }
-    else{
-      throw e;
-    }
+    throw e;
   }
 }
 
@@ -47,9 +43,7 @@ export async function edit(data: ItemsData): Promise<void> {
     if (e instanceof NotFoundError) {
       throw new NotFoundError();
     }
-    else{
-      throw e
-    }
+    throw e;
   }
 }
 
@@ -61,8 +55,6 @@ export async function dataDelete(id: number): Promise<void> {
     if (e instanceof NotFoundError) {
       throw new NotFoundError();
     }
-    else{
-      throw e;
-    }
+    throw e;
   }
 }
