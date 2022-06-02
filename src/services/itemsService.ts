@@ -1,6 +1,6 @@
 import * as ItemsModel from "../models/itemsModel"
 import {ItemsData} from "../interfaces/items";
-import {DBError, NotFoundError} from "../interfaces/my-error";
+import {DBError, NotFoundError, ConflictError} from "../interfaces/my-error";
 const log = require("log4js").getLogger("index");
 
 //全件取得
@@ -11,7 +11,17 @@ export async function getList(): Promise<ItemsData[]> {
 
 //１件作成
 export async function create(data: ItemsData): Promise<void> {
-  await ItemsModel.create(data);
+  try {
+    await ItemsModel.create(data);
+  }
+  catch (e){
+    if (e instanceof ConflictError) {
+      throw new ConflictError();
+    }
+    else{
+      throw e;
+    }
+  }
 }
 
 //１件取得
@@ -40,7 +50,10 @@ export async function edit(data: ItemsData): Promise<void> {
    await ItemsModel.update(data);
   } catch (e) {
     if (e instanceof NotFoundError) {
-      throw new NotFoundError("not found");
+      throw new NotFoundError();
+    }
+    else{
+      throw e
     }
   }
 }
@@ -51,7 +64,7 @@ export async function dataDelete(id: number): Promise<void> {
     await ItemsModel.dataDelete(id);
   } catch (e) {
     if (e instanceof NotFoundError) {
-      throw new NotFoundError("not found");
+      throw new NotFoundError();
     }
     else{
       throw e;

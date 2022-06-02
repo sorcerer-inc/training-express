@@ -1,7 +1,7 @@
 import {Response, Request, NextFunction} from "express";
 import * as Items from "../services/itemsService"
 import {ItemsData} from "../interfaces/items";
-import {DBError, NotFoundError} from "../interfaces/my-error";
+import {ConflictError, DBError, NotFoundError} from "../interfaces/my-error";
 import * as typeGuard from "../helpers/typeGuard";
 const log = require('log4js').getLogger("index");
 
@@ -56,10 +56,15 @@ export class ItemsController {
 
     try {
       await Items.create(putData);
-      res.status(200).end();
+      res.end();
     }
     catch (e) {
-      next(e);
+      if (e instanceof ConflictError) {
+        res.status(409).end();
+      }
+      else{
+        next(e);
+      }
     }
   }
 
@@ -81,7 +86,7 @@ export class ItemsController {
     try {
       const result = await Items.getRecode(id);
       const resData: ItemsData = result;
-      res.status(200).send(resData);
+      res.json(resData);
     }
     catch (e) {
       if (e instanceof NotFoundError) {
@@ -163,7 +168,7 @@ export class ItemsController {
 
     try {
       await Items.dataDelete(id);
-      res.status(200).end();
+      res.end();
     }
     catch (e) {
       if (e instanceof NotFoundError) {
