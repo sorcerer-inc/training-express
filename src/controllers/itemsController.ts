@@ -1,5 +1,5 @@
 import {Response, Request, NextFunction} from "express";
-import * as Items from "../services/itemsService"
+import * as ItemsService from "../services/itemsService"
 import {ItemsData} from "../interfaces/items";
 import {ConflictError, DBError, NotFoundError} from "../interfaces/my-error";
 import * as typeGuard from "../helpers/typeGuard";
@@ -10,7 +10,7 @@ export class ItemsController {
   //全件取得
   async getList(req: Request, res :Response<ItemsData[]>, next :NextFunction){
     try {
-      const result = await Items.getList();
+      const result = await ItemsService.getList();
       const resData: ItemsData[] = result;
       res.json(resData);
     }
@@ -55,7 +55,7 @@ export class ItemsController {
     }
 
     try {
-      await Items.create(putData);
+      await ItemsService.create(putData);
       res.end();
     }
     catch (e) {
@@ -84,7 +84,7 @@ export class ItemsController {
     }
 
     try {
-      const result = await Items.getRecode(id);
+      const result = await ItemsService.getRecode(id);
       const resData: ItemsData = result;
       res.json(resData);
     }
@@ -138,7 +138,7 @@ export class ItemsController {
     }
 
     try {
-      await Items.edit(putData);
+      await ItemsService.edit(putData);
       res.end();
     }
     catch (e) {
@@ -167,7 +167,7 @@ export class ItemsController {
     }
 
     try {
-      await Items.dataDelete(id);
+      await ItemsService.dataDelete(id);
       res.end();
     }
     catch (e) {
