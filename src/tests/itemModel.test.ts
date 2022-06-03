@@ -1,69 +1,53 @@
-import * as Items from "../services/itemsService";
+require('dotenv').config(); //.envに変わったから最初に読み込みが必要
 import * as item from "../models/itemsModel";
 import {ItemsData} from "../interfaces/items";
 
 import {
-  DBError,
   NotFoundError,
-  AuthError,
-  NotEnoughError,
-  LimitExceededError,
+  ConflictError
 } from "../interfaces/my-error";
 
 const result_a :ItemsData = {
-    'id': 1003,
+    'id': 1002,
     'name': "B Rank medicine",
     'heal': 50,
     'price': 400
   };
 
 const result_b :ItemsData = {
-  'id': 1004,
+  'id': 1003,
   'name': "C Rank medicine",
   'heal': 60,
   'price': 500
 };
 
-const mock_item_data: ItemsData = {
-  'id': 1005,
-  'name': "D Rank medicine",
-  'heal': 70,
-  'price': 600
-}
-
 const edit_item_data: ItemsData = {
-  'id': 1004,
-  'name': "C Rank medicine",
+  'id': 1002,
+  'name': "B Rank medicine",
   'heal': 55,
-  'price': 550
+  'price': 450
 }
-
-const mock_data_all_items: any = [result_a, result_b];
-const mock_data_all_items_empty: any = [];
-
-test("get Recode", async () => {
-  jest.spyOn(item, "getRecode").mockImplementation( (id:number) => {
-    return mock_data_all_items[id];
-  });
-
-  const resultA = await Items.getRecode(1003);
-  const resultB = await Items.getRecode(1004);
-  expect(resultA).toEqual(result_a);
-  expect(resultB).toEqual(result_b);
-
-  try{
-    await Items.getRecode(1005);
-  } catch (e) {
-    expect(e instanceof NotFoundError).toBeTruthy();
-  }
-})
 
 test("create", async () => {
   try{
-    await item.create(mock_item_data);
+    await item.create(result_a);
+    await item.create(result_b);
     console.log("create ok");
   }catch (e) {
-    expect(e instanceof DBError).toBeTruthy();
+    console.log("create bad");
+    expect(e instanceof ConflictError).toBeTruthy();
+  }
+})
+
+test("get Recode", async () => {
+  const resultA = await item.getRecode(1002);
+  console.log(resultA);
+
+  try{
+    await item.getRecode(1005);
+  } catch (e) {
+    console.log("get Recode bad");
+    expect(e instanceof NotFoundError).toBeTruthy();
   }
 })
 
@@ -72,7 +56,8 @@ test("update", async () => {
     await item.update(edit_item_data);
     console.log("update ok");
   }catch (e) {
-    expect(e instanceof DBError).toBeTruthy();
+    console.log("update bad");
+    expect(e instanceof NotFoundError).toBeTruthy();
   }
 })
 
@@ -81,6 +66,7 @@ test("delete", async () => {
     await item.dataDelete(1003);
     console.log("delete ok");
   }catch (e) {
-    expect(e instanceof DBError).toBeTruthy();
+    console.log("delete bad");
+    expect(e instanceof NotFoundError).toBeTruthy();
   }
 })
