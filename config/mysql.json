@@ -1,6 +1,6 @@
 {
   "host": "localhost",
   "user": "root",
-  "database": "express_training",
+  "database": "express",
   "password": "forge"
 }

@@ -1,5 +1,6 @@
 import * as express from "express";
 import * as foo from "./foo";
+import * as items from './items';
 import * as users from "./users";
 
 import { HogeController, UserController } from "../controllers";
@@ -18,6 +19,7 @@ router.get("/", (req, res, next) => {
 router.get("/errorSample", hogeController.errorResponse);
 
 router.use("/foo", foo.router);
+router.use("/items", items.router);
 
 //test mysql2
 router.get("/db", (req, res, next) => {
