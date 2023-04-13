@@ -8,6 +8,7 @@ export class HogeController {
   async getHoge(req: Request, res: Response) {
     log.info("start getHoge");
     DataProcService.waitAndExec();
+    res.send("ok");
   };
 
   async postHoge(req: Request, res: Response) {
