@@ -7,13 +7,13 @@ import {
   login,
   buyItem,
   useItem,
-} from "../services/UserService";
+} from "../services/user-service";
 import {
   NotFoundError,
   AuthError,
   NotEnoughError,
   LimitExceededError,
-} from "../interfaces/MyError";
+} from "../interfaces/my-error";
 
 export class UserController {
   async getAllUsers(req: Request, res: Response, next: NextFunction) {

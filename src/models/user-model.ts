@@ -1,7 +1,7 @@
-import { dbPool } from "../helpers/DBHelper";
-import { User } from "../interfaces/User";
+import { dbPool } from "../helpers/db-helper";
+import { User } from "../interfaces/user";
 import { RowDataPacket, OkPacket } from "mysql2";
-import { NotFoundError } from "../interfaces/MyError";
+import { NotFoundError } from "../interfaces/my-error";
 
 const getAllUsers = async (): Promise<User[]> => {
   const [rows] = await dbPool.query("SELECT * FROM `users`;");

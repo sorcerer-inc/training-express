@@ -1,6 +1,6 @@
-import { dbPool } from "../helpers/DBHelper";
-import { UserItemInput, UserItemOutput } from "../interfaces/UserItem";
-import { NotFoundError } from "../interfaces/MyError";
+import { dbPool } from "../helpers/db-helper";
+import { UserItemInput, UserItemOutput } from "../interfaces/user-item";
+import { NotFoundError } from "../interfaces/my-error";
 
 const getUserItem = async (data: UserItemInput): Promise<UserItemOutput> => {
   const [rows] = await dbPool.query(
