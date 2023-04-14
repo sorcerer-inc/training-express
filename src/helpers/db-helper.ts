@@ -1,4 +1,4 @@
-import mysql from "mysql2/promise";
+import mysql, { PoolConnection } from "mysql2/promise";
 
 const dbPool = mysql.createPool({
   host: process.env.DB_HOST,
@@ -10,4 +10,18 @@ const dbPool = mysql.createPool({
   queueLimit: Number(process.env.QUEUE_LIMIT),
 });
 
-export { dbPool };
+const transactionHelper = async (
+  dbConnection: PoolConnection,
+  callback: () => Promise<void>
+) => {
+  try {
+    await dbConnection.beginTransaction();
+    await callback();
+    await dbConnection.commit();
+  } catch (e) {
+    await dbConnection.rollback();
+    throw e;
+  }
+};
+
+export { dbPool, transactionHelper };
