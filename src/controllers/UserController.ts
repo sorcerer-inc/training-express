@@ -13,7 +13,7 @@ import {
   AuthError,
   NotEnoughError,
   LimitExceededError,
-} from "../interfaces/my-error";
+} from "../interfaces/MyError";
 
 export class UserController {
   async getAllUsers(req: Request, res: Response, next: NextFunction) {

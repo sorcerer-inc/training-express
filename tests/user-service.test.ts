@@ -12,13 +12,13 @@ import {
   AuthError,
   NotEnoughError,
   LimitExceededError,
-} from "../src/interfaces/my-error";
+} from "../src/interfaces/MyError";
 
 import { User, UserLogin } from "../src/interfaces/User";
-import { UserItemInput, UserItemOutput } from "../src/interfaces/user-item";
+import { UserItemInput, UserItemOutput } from "../src/interfaces/UserItem";
 
 import * as db_user from "../src/models/UserModel";
-import * as db_users_items from "../src/models/usersItemsModel";
+import * as db_users_items from "../src/models/UsersItemsModel";
 
 //jest.useFakeTimers();
 

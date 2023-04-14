@@ -1,14 +1,14 @@
 import * as userModel from "../models/UserModel";
-import * as usersItemsModel from "../models/usersItemsModel";
+import * as usersItemsModel from "../models/UsersItemsModel";
 import {
   NotFoundError,
   AuthError,
   NotEnoughError,
   LimitExceededError,
-} from "../interfaces/my-error";
+} from "../interfaces/MyError";
 
 import { User, UserLogin } from "../interfaces/User";
-import { UserItemInput, UserItemOutput } from "../interfaces/user-item";
+import { UserItemInput, UserItemOutput } from "../interfaces/UserItem";
 
 const MAX_ITEMS_NUM = 20;
 

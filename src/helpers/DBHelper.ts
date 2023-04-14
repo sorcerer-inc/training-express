@@ -1,6 +1,6 @@
 import mysql from "mysql2/promise";
 
-const db_pool = mysql.createPool({
+const dbPool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   database: process.env.DB_DATABASE,
@@ -10,4 +10,4 @@ const db_pool = mysql.createPool({
   queueLimit: Number(process.env.QUEUE_LIMIT),
 });
 
-export { db_pool };
+export { dbPool };
