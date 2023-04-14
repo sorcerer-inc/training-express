@@ -1,28 +1,24 @@
 import { Response, Request, NextFunction } from "express";
 import {
-  getAllUsersSrv,
-  createUserSrv,
-  getUserSrv,
-  updateUserSrv,
-  loginSrv,
-  buyItemSrv,
-  useItemSrv,
+  getAllUsers,
+  createUser,
+  getUser,
+  updateUser,
+  login,
+  buyItem,
+  useItem,
 } from "../services/UserService";
-
 import {
-  DBError,
   NotFoundError,
   AuthError,
   NotEnoughError,
   LimitExceededError,
 } from "../interfaces/my-error";
 
-const log = require("log4js").getLogger("index");
-
 export class UserController {
   async getAllUsers(req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await getAllUsersSrv();
+      const result = await getAllUsers();
 
       res.status(200);
       res.json(result);
@@ -44,13 +40,10 @@ export class UserController {
     }
 
     try {
-      const result = await createUserSrv(req.body);
+      const result = await createUser(req.body);
       res.status(200);
       res.json({ id: result });
     } catch (e) {
-      // if (e instanceof DBError) {
-      //   res.status(500).end();
-      // }
       next(e);
     }
   }
@@ -63,7 +56,7 @@ export class UserController {
     }
 
     try {
-      const result = await getUserSrv(parseInt(req.params.id));
+      const result = await getUser(parseInt(req.params.id));
 
       res.status(200);
       res.json(result);
@@ -96,7 +89,7 @@ export class UserController {
       const money = parseInt(req.body.money);
       const hp = parseInt(req.body.hp);
 
-      const result = await updateUserSrv({ id, name, password, money, hp });
+      const result = await updateUser({ id, name, password, money, hp });
       if (result) {
         res.status(200).end();
       }
@@ -119,7 +112,7 @@ export class UserController {
     try {
       const id = parseInt(req.body.id);
       const password = req.body.password;
-      const result = await loginSrv({ id, password });
+      const result = await login({ id, password });
       if (result) {
         res.status(200).end();
       }
@@ -143,7 +136,7 @@ export class UserController {
       const id = parseInt(req.body.id);
       const item_id = parseInt(req.body.item_id);
       const num = parseInt(req.body.num);
-      const result = await buyItemSrv({ id, item_id, num });
+      const result = await buyItem({ id, item_id, num });
       res.status(200).end();
     } catch (e) {
       if (e instanceof NotEnoughError) {
@@ -169,7 +162,7 @@ export class UserController {
       const id = parseInt(req.body.id);
       const item_id = parseInt(req.body.item_id);
       const num = parseInt(req.body.num);
-      const result = await useItemSrv({ id, item_id, num });
+      const result = await useItem({ id, item_id, num });
       res.status(200).end();
     } catch (e) {
       if (e instanceof NotEnoughError) {

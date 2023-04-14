@@ -1,14 +1,6 @@
+import * as userModel from "../models/UserModel";
+import * as usersItemsModel from "../models/usersItemsModel";
 import {
-  getAllUsers,
-  createUser,
-  getUser,
-  updateUser,
-} from "../models/UserModel";
-
-import { getUserItem, updateUserItem } from "../models/usersItemsModel";
-
-import {
-  DBError,
   NotFoundError,
   AuthError,
   NotEnoughError,
@@ -20,19 +12,19 @@ import { UserItemInput, UserItemOutput } from "../interfaces/user-item";
 
 const MAX_ITEMS_NUM = 20;
 
-const getAllUsersSrv = async () => {
-  const result = await getAllUsers();
+const getAllUsers = async () => {
+  const result = await userModel.getAllUsers();
   return result;
 };
 
-const createUserSrv = async (data: User) => {
-  const result: number = await createUser(data);
+const createUser = async (data: User) => {
+  const result: number = await userModel.createUser(data);
   return result;
 };
 
-const getUserSrv = async (data: number) => {
+const getUser = async (data: number) => {
   try {
-    const result = await getUser(data);
+    const result = await userModel.getUser(data);
     return result;
   } catch (e) {
     if (e instanceof NotFoundError) throw new NotFoundError();
@@ -40,9 +32,9 @@ const getUserSrv = async (data: number) => {
   }
 };
 
-const updateUserSrv = async (data: User) => {
+const updateUser = async (data: User) => {
   try {
-    const result: boolean = await updateUser(data);
+    const result: boolean = await userModel.updateUser(data);
 
     if (result) {
       return result;
@@ -55,9 +47,9 @@ const updateUserSrv = async (data: User) => {
   }
 };
 
-const loginSrv = async (data: UserLogin) => {
+const login = async (data: UserLogin) => {
   try {
-    const result: User = await getUser(data.id);
+    const result: User = await userModel.getUser(data.id);
 
     // password check
     if (result && result.password == data.password) {
@@ -71,12 +63,12 @@ const loginSrv = async (data: UserLogin) => {
   }
 };
 
-const buyItemSrv = async (data: UserItemInput) => {
+const buyItem = async (data: UserItemInput) => {
   //logic
   try {
     //1. get user_item data
-    let user_item = await getUserItem(data);
-    let user = await getUser(data.id);
+    let user_item = await usersItemsModel.getUserItem(data);
+    let user = await userModel.getUser(data.id);
     let item_price = 1; //TODO
 
     //2. if limit?
@@ -91,10 +83,14 @@ const buyItemSrv = async (data: UserItemInput) => {
 
     //3.1 items += num;
     user_item.num += data.num;
-    updateUserItem({ id: data.id, item_id: data.item_id, num: user_item.num });
+    usersItemsModel.updateUserItem({
+      id: data.id,
+      item_id: data.item_id,
+      num: user_item.num,
+    });
     //3.2 money -= cost;
     user.money! -= cost;
-    updateUser({
+    userModel.updateUser({
       id: data.id,
       name: user.name,
       password: user.password,
@@ -109,12 +105,12 @@ const buyItemSrv = async (data: UserItemInput) => {
   }
 };
 
-const useItemSrv = async (data: UserItemInput) => {
+const useItem = async (data: UserItemInput) => {
   //logic
   try {
     //1. get user_item data
-    let user_item = await getUserItem(data);
-    let user = await getUser(data.id);
+    let user_item = await usersItemsModel.getUserItem(data);
+    let user = await userModel.getUser(data.id);
     let item_heal = 1; //TODO
 
     //3. if enough?
@@ -134,12 +130,12 @@ const useItemSrv = async (data: UserItemInput) => {
 };
 
 export {
-  getAllUsersSrv,
-  createUserSrv,
-  getUserSrv,
-  updateUserSrv,
-  loginSrv,
-  buyItemSrv,
-  useItemSrv,
+  getAllUsers,
+  createUser,
+  getUser,
+  updateUser,
+  login,
+  buyItem,
+  useItem,
 };
 // curl -X "GET" "http://localhost:3000/users" -H "accept: application/json"
