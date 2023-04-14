@@ -1,25 +1,24 @@
 import {
-  getAllUsersSrv,
-  createUserSrv,
-  getUserSrv,
-  updateUserSrv,
-  loginSrv,
-  buyItemSrv,
-  useItemSrv,
-} from "../services/UserService";
+  getAllUsers,
+  createUser,
+  getUser,
+  updateUser,
+  login,
+  buyItem,
+} from "../src/services/UserService";
 
 import {
   NotFoundError,
   AuthError,
   NotEnoughError,
   LimitExceededError,
-} from "../interfaces/my-error";
+} from "../src/interfaces/my-error";
 
-import { User, UserLogin } from "../interfaces/User";
-import { UserItemInput, UserItemOutput } from "../interfaces/user-item";
+import { User, UserLogin } from "../src/interfaces/User";
+import { UserItemInput, UserItemOutput } from "../src/interfaces/user-item";
 
-import * as db_user from "../models/UserModel";
-import * as db_users_items from "../models/usersItemsModel";
+import * as db_user from "../src/models/UserModel";
+import * as db_users_items from "../src/models/usersItemsModel";
 
 //jest.useFakeTimers();
 
@@ -68,8 +67,8 @@ test("get all users", async () => {
         })
     );
 
-  expect(await getAllUsersSrv()).toEqual(mock_data_all_users);
-  expect(await getAllUsersSrv()).toEqual(mock_data_all_users_empty);
+  expect(await getAllUsers()).toEqual(mock_data_all_users);
+  expect(await getAllUsers()).toEqual(mock_data_all_users_empty);
 });
 
 test("create user", async () => {
@@ -87,7 +86,7 @@ test("create user", async () => {
   });
 
   expect(
-    await createUserSrv({ name: "test", password: "test", money: 10, hp: 10 })
+    await createUser({ name: "test", password: "test", money: 10, hp: 10 })
   ).toEqual(mock_data_all_users.length);
 });
 
@@ -98,12 +97,12 @@ test("get user", async () => {
     });
   });
 
-  expect(await getUserSrv(0)).toEqual(mock_data_user_1);
-  expect(await getUserSrv(1)).toEqual(mock_data_user_2);
+  expect(await getUser(0)).toEqual(mock_data_user_1);
+  expect(await getUser(1)).toEqual(mock_data_user_2);
 
   // user id存在しない
   try {
-    await getUserSrv(100);
+    await getUser(100);
   } catch (e) {
     expect(e instanceof NotFoundError).toBeTruthy();
   }
@@ -117,7 +116,7 @@ test("update user", async () => {
   });
 
   expect(
-    await updateUserSrv({
+    await updateUser({
       id: 1,
       name: "test",
       password: "test",
@@ -135,7 +134,7 @@ test("login user", async () => {
   });
 
   expect(
-    await loginSrv({
+    await login({
       id: mock_data_all_users[0].id!,
       password: mock_data_all_users[0].password!,
     })
@@ -144,7 +143,7 @@ test("login user", async () => {
   // wrong password
   try {
     expect(
-      await loginSrv({
+      await login({
         id: mock_data_all_users[0].id!,
         password: "",
       })
@@ -170,17 +169,17 @@ test("buy item", async () => {
   });
 
   // 1. 成功
-  expect(await buyItemSrv({ id: 1, item_id: 1, num: 1 }));
+  expect(await buyItem({ id: 1, item_id: 1, num: 1 }));
   // 2. 存在しない
   try {
-    expect(await buyItemSrv({ id: 10, item_id: 1, num: 1 }));
+    expect(await buyItem({ id: 10, item_id: 1, num: 1 }));
   } catch (e) {
     expect(e instanceof NotFoundError).toBeTruthy();
   }
   // 3. item num　上限
   mock_data_user_items[0].num = 20;
   try {
-    expect(await buyItemSrv({ id: 1, item_id: 1, num: 1 }));
+    expect(await buyItem({ id: 1, item_id: 1, num: 1 }));
   } catch (e) {
     expect(e instanceof LimitExceededError).toBeTruthy();
   }
@@ -188,7 +187,7 @@ test("buy item", async () => {
   // 4. user money not enough
   mock_data_user_items[0].num = 0;
   try {
-    expect(await buyItemSrv({ id: 1, item_id: 1, num: 20 }));
+    expect(await buyItem({ id: 1, item_id: 1, num: 20 }));
   } catch (e) {
     expect(e instanceof NotEnoughError).toBeTruthy();
   }
