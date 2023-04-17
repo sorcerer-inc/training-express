@@ -21,6 +21,8 @@ const transactionHelper = async (
   } catch (e) {
     await dbConnection.rollback();
     throw e;
+  } finally {
+    await dbConnection.release();
   }
 };
 

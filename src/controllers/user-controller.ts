@@ -16,6 +16,8 @@ export class UserController {
     } catch (e) {
       await dbConnection.rollback();
       next(e);
+    } finally {
+      dbConnection.release(); // connectionを返却
     }
   }
 
@@ -40,6 +42,7 @@ export class UserController {
     const dbConnection = await dbPool.getConnection();
     try {
       let result: number;
+      // トランザクション例2
       await transactionHelper(dbConnection, async () => {
         result = await createUser(user, dbConnection);
       });
