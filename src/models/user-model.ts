@@ -7,7 +7,7 @@ const getAllUsers = async (dbConnection: PoolConnection): Promise<User[]> => {
     "SELECT * FROM `users`;"
   );
 
-  const result: User[] = (rows as any).map((row: User) => {
+  const result: User[] = rows.map((row) => {
     return {
       id: row.id,
       name: row.name,
