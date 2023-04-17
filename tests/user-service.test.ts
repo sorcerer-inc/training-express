@@ -22,8 +22,8 @@ const mock_data_all_users_empty: User[] = [];
 test("get all users", async () => {
   jest
     .spyOn(userModel, "getAllUsers")
-    .mockImplementationOnce(async () => mock_data_all_users)
-    .mockImplementationOnce(async () => mock_data_all_users_empty);
+    .mockResolvedValueOnce(mock_data_all_users)
+    .mockResolvedValueOnce(mock_data_all_users_empty);
 
   let conn: any;
   expect(await getAllUsers(conn)).toEqual(mock_data_all_users);
