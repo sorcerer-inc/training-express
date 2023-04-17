@@ -7,14 +7,14 @@ export class UserController {
   async getAllUsers(req: Request, res: Response, next: NextFunction) {
     const dbConnection = await dbPool.getConnection();
     try {
-      dbConnection.beginTransaction();
+      await dbConnection.beginTransaction(); // トランザクション例
       const result = await getAllUsers(dbConnection);
 
-      dbConnection.commit();
+      await dbConnection.commit();
       res.status(200);
       res.json(result);
     } catch (e) {
-      dbConnection.rollback();
+      await dbConnection.rollback();
       next(e);
     }
   }
