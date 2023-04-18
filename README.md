@@ -80,6 +80,15 @@ npm update @types/express-serve-static-core --depth 2
 npm update @types/serve-static --depth 2
 ```
 
+## docker 起動
+
+起動前に、前の docker container を閉じる
+
+```bash
+cd docker
+docker-compose up -d
+```
+
 ## DB マイグレーション
 
 https://db-migrate.readthedocs.io/en/latest/Getting%20Started/installation/#installation
