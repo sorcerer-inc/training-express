@@ -3,7 +3,9 @@ import { User } from "../interfaces/user";
 import { RowDataPacket, OkPacket } from "mysql2";
 
 const getAllUsers = async (dbConnection: PoolConnection): Promise<User[]> => {
-  const [rows] = await dbConnection.query<RowDataPacket[]>("SELECT * FROM `users`;");
+  const [rows] = await dbConnection.query<RowDataPacket[]>(
+    "SELECT * FROM `users`;"
+  );
 
   const result: User[] = rows.map((row) => {
     return {
@@ -17,7 +19,10 @@ const getAllUsers = async (dbConnection: PoolConnection): Promise<User[]> => {
   return result;
 };
 
-const createUser = async (data: User, dbConnection: PoolConnection): Promise<number> => {
+const createUser = async (
+  data: User,
+  dbConnection: PoolConnection
+): Promise<number> => {
   const [rows] = await dbConnection.query<OkPacket>(
     "INSERT INTO `users` (`name`, `password`, `money`, `hp`) VALUES (?,?,?,?)",
     [data.name, data.password, data.money, data.hp]

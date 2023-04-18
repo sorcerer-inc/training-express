@@ -4,7 +4,11 @@ import { dbPool, transactionHelper } from "../helpers/db-helper";
 import { User } from "../interfaces/user";
 
 export class UserController {
-  async getAllUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async getAllUsers(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     const dbConnection = await dbPool.getConnection();
     try {
       await dbConnection.beginTransaction(); // トランザクション例
@@ -21,8 +25,17 @@ export class UserController {
     }
   }
 
-  async createUser(req: Request, res: Response, next: NextFunction): Promise<void> {
-    if (!req.body.name || !req.body.password || !req.body.money || !req.body.hp) {
+  async createUser(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    if (
+      !req.body.name ||
+      !req.body.password ||
+      !req.body.money ||
+      !req.body.hp
+    ) {
       res.status(400).json({ message: "Invalid parameters or body." });
       return;
     }

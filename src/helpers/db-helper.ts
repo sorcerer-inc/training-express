@@ -10,7 +10,10 @@ const dbPool = mysql.createPool({
   queueLimit: Number(process.env.QUEUE_LIMIT),
 });
 
-const transactionHelper = async (dbConnection: PoolConnection, callback: () => Promise<void>) => {
+const transactionHelper = async (
+  dbConnection: PoolConnection,
+  callback: () => Promise<void>
+) => {
   try {
     await dbConnection.beginTransaction();
     await callback();

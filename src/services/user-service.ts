@@ -7,7 +7,10 @@ const getAllUsers = async (dbConnection: PoolConnection): Promise<User[]> => {
   return result;
 };
 
-const createUser = async (data: User, dbConnection: PoolConnection): Promise<number> => {
+const createUser = async (
+  data: User,
+  dbConnection: PoolConnection
+): Promise<number> => {
   const result: number = await userModel.createUser(data, dbConnection);
   return result;
 };
