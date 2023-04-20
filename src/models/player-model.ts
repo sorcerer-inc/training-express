@@ -63,20 +63,26 @@ const updatePlayer = async (
   //idがないならエラー
   if(data.id == null) throw new NotFoundError("id is undefined.");
 
-  //Playerをstring[](`key(カラム名)` = value(値))に変換
+  //Playerからカラム名と値を別の配列にして取得
+  let columnName: (string| number)[] = [];
   let updatingData: (string| number)[] = [];
-  Object.keys(data).forEach((key) => {
+  (Object.keys(data) as (keyof Player)[]).map((key) => {
     if(key == "id") return; //idはWHERE句で使いたいため配列には格納しない
-    const tempData = data[key]; //型判定のために変数に代入
-    if(tempData != null) {
-      if(typeof tempData == "string") updatingData.push(`${key} = "${tempData}"`);
-      if(typeof tempData == "number") updatingData.push(`${key} = "${tempData.toString()}"`);
+    const tempData = data[key]; //そのままだとなぜかundefinedを型除外できないため代入
+    if(key != null && tempData != null) {
+      columnName.push(`${key} = ?`);
+      updatingData.push(tempData);
     }
   });
 
+  //配列の最後にWHERE句に使うidを入れる
+  updatingData.push(data.id);
+
   //UPDATE
+  const sql = "UPDATE `players` SET " + columnName.join(", ") + " WHERE id = ?";
   await dbConnection.query(
-    "UPDATE `players` SET " + updatingData.join(", ") + " WHERE id = " + data.id
+    sql,
+    updatingData
   );
 };
 
