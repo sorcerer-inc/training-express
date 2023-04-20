@@ -60,7 +60,7 @@ const updatePlayer = async (
   dbConnection: PoolConnection
 ): Promise<void> => {
 
-  //idが値がないならエラー
+  //idがないならエラー
   if(data.id == null) throw new NotFoundError("id is undefined.");
 
   //Playerをstring[](`key(カラム名)` = value(値))に変換
@@ -69,7 +69,7 @@ const updatePlayer = async (
     if(key == "id") return; //idはWHERE句で使いたいため配列には格納しない
     const tempData = data[key]; //型判定のために変数に代入
     if(tempData != null) {
-      if(typeof tempData == "string")updatingData.push(`${key} = "${tempData}"`);
+      if(typeof tempData == "string") updatingData.push(`${key} = "${tempData}"`);
       if(typeof tempData == "number") updatingData.push(`${key} = "${tempData.toString()}"`);
     }
   });
