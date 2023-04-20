@@ -25,4 +25,11 @@ const createPlayer = async (
   return createdId;
 };
 
-export { getIdAndName, getDataById, createPlayer };
+const updatePlayer = async (
+  data: Player,
+  dbConnection: PoolConnection
+): Promise<void> => {
+  const createdId = await playerModel.updatePlayer(data, dbConnection);
+};
+
+export { getIdAndName, getDataById, createPlayer, updatePlayer };

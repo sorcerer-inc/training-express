@@ -55,4 +55,29 @@ const insertPlayer = async (
   return rows.insertId;
 };
 
-export { selectPlayersIdAndName, selectPlayerDataById, insertPlayer };
+const updatePlayer = async (
+  data: Player,
+  dbConnection: PoolConnection
+): Promise<void> => {
+
+  //idが値がないならエラー
+  if(data.id == null) throw new NotFoundError("id is undefined.");
+
+  //Playerをstring[](`key(カラム名)` = value(値))に変換
+  let updatingData: (string| number)[] = [];
+  Object.keys(data).forEach((key) => {
+    if(key == "id") return; //idはWHERE句で使いたいため配列には格納しない
+    const tempData = data[key]; //型判定のために変数に代入
+    if(tempData != null) {
+      if(typeof tempData == "string")updatingData.push(`${key} = "${tempData}"`);
+      if(typeof tempData == "number") updatingData.push(`${key} = "${tempData.toString()}"`);
+    }
+  });
+
+  //UPDATE
+  await dbConnection.query(
+    "UPDATE `players` SET " + updatingData.join(", ") + " WHERE id = " + data.id
+  );
+};
+
+export { selectPlayersIdAndName, selectPlayerDataById, insertPlayer, updatePlayer };
