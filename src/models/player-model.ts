@@ -1,5 +1,5 @@
 import { PoolConnection } from "mysql2/promise";
-import { Player } from "../interfaces/player";
+import { Player, PlayerKey } from "../interfaces/player";
 import { RowDataPacket, OkPacket } from "mysql2";
 import { NotFoundError } from "../interfaces/my-error";
 
@@ -64,9 +64,9 @@ const updatePlayer = async (
   if(data.id == null) throw new NotFoundError("id is undefined.");
 
   //Playerからカラム名と値を別の配列にして取得
-  let columnName: (string| number)[] = [];
-  let updatingData: (string| number)[] = [];
-  (Object.keys(data) as (keyof Player)[]).map((key) => {
+  let columnName: string[] = [];
+  let updatingData: (string | number)[] = [];
+  (Object.keys(data) as PlayerKey[]).forEach((key) => {
     if(key == "id") return; //idはWHERE句で使いたいため配列には格納しない
     const tempData = data[key]; //そのままだとなぜかundefinedを型除外できないため代入
     if(key != null && tempData != null) {
