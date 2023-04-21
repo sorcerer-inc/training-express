@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from "express";
 import { getIdAndName, getDataById, createPlayer, updatePlayer  } from "../services/player-service";
 import { dbPool } from "../helpers/db-helper";
-import { Player } from "../interfaces/player";
+import { Player, PlayerKey, PlayerKeyString } from "../interfaces/player";
 import { NotFoundError } from "../interfaces/my-error";
 
 export class PlayerController {
@@ -84,13 +84,12 @@ export class PlayerController {
   ): Promise<void> {
 
     //リクエストをPlayerに変換
-    let requestData: Player = {
-      id: parseInt(req.params.id),
-      name: req.body.name,
-      hp: req.body.hp,
-      mp: req.body.mp,
-      money: req.body.money,
-    };
+    let requestData: Player = {};
+    (Object.keys(req.body) as PlayerKey[]).forEach((key) => {
+      if(!PlayerKeyString.includes(key)) return;
+      requestData[key] = req.body[key];
+    });
+    requestData.id = parseInt(req.params.id);
 
     //変換したPlayerをserviceに渡す
     const dbConnection = await dbPool.getConnection();
